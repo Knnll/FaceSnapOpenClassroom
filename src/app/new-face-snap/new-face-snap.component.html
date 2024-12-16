@@ -1,0 +1,39 @@
+<div class="form-card">
+  <h2>NOUVEAU FACESNAP</h2>
+  <!-- Contrairement au formulaire template, on n'utilise pas de référence locale (#)
+   mais l'attribut [formGroup] !-->
+  <form [formGroup]="snapForm">
+    <!-- Il faut utiliser un 'formControlName' à chaque input que l'on ajoute à ce form:
+    Attention, ces noms doivent correspondre aux noms des contrôles créés avec FormBuilder -->
+    <div class="form-group">
+      <label for="title">Titre</label>
+      <input type="text" id="title" formControlName="title">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input type="text" id="description" formControlName="description">
+    </div>
+    <div class="form-group">
+      <label for="imageUrl">URL de l'image</label>
+      <input type="text" id="imageUrl" formControlName="imageUrl">
+    </div>
+    <div class="form-group">
+      <label for="location">Lieu</label>
+      <input type="text" id="location" formControlName="location">
+    </div>
+    <div class="action-button">
+      <button type="submit" (click)="onSubmitForm()" [disabled]="snapForm.invalid">Enregistrer</button>
+    </div>
+  </form>
+</div>
+<!-- La ligne si dessous est un pattern très courant et extrêmement utile ! Il souscrit à
+l'Obeservable, il ajoute la div UNIQUEMENT si l'Observable émet, crée un alias pour l'émission
+qui est utilisable à l'intérieur de la div. L'alias permet de traiter les émissions de l'Obs comme si
+c'étaient des valeurs fixes, en dur. -->
+<div class="face-snap-card" *ngIf="faceSnapPreview$ | async as faceSnap">
+  <h2>{{ faceSnap.title | uppercase }}</h2>
+  <p>Mis en ligne {{ faceSnap.createdDate | date: 'à HH:mm, le d MMMM yyyy' }}</p>
+  <img [src]="faceSnap.imageUrl" [alt]="faceSnap.title">
+  <p>{{ faceSnap.description }}</p>
+  <p *ngIf="faceSnap.location">Photo prise à {{ faceSnap.location }}</p>
+</div>
